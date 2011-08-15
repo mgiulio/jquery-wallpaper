@@ -8,17 +8,34 @@ $.fullPgBgImg = function(image, usrCfg) {
 			{
 				name: 'CSS3 background-size',
 				isApplicable: function() {
-					return false;
+					if (!Modernizr)
+						return Modernizr.backgroundsize;
+					else {
+						var 
+							testEl = document.createElement('testel'),
+							testStyle = testEl.style,
+							domPrefixes = 'Webkit Moz O ms Khtml'.split(' '),
+							props = 
+								('backgroundSize' + ' ' + 
+								domPrefixes.join('BackgroundSize' + ' ') + 
+								'BackgroundSize')
+								.split(' ')
+						;
+						for (var i in props) // check this
+							if (testStyle[props[i]] !== undefined )
+								return true;
+						return false;
+					}
 				},
 				apply: function() {
-					/*
-						background-image: url(../img/full-page-bg/pieces-of-me.jpg);
-						background-attachment: fixed;
-						background-position: center center;
-						background-repeat: no-repeat;
-						background-color: #d2691e;
-						background-size: cover;
-					*/
+					$('html').css({
+						'background-image': 'url(' + cfg.image + ')',
+						'background-attachment': 'fixed',
+						'background-position': 'center center',
+						'background-repeat': 'no-repeat',
+						'background-color': '#d2691e',
+						'background-size': 'cover'
+					});
 				}
 			},
 			{
