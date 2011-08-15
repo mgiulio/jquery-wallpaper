@@ -10,14 +10,17 @@
 			background-color: #000;
 		}
 		body {
+			font-family: Arial, Helvetica,sans-serif;
+		}
+		#page-wrap {
 			width: 720px;
 			margin: 0 auto;
 			background-color: #fff;
 			border: 1px solid #aaa;
-			font-family: Arial, Helvetica,sans-serif;
 			padding: 20px;
 			margin-top: 80px;
-			/*that clored plugin page*/
+			/* that clored plugin page*/
+			opacity: 50%;
 		}
 		h1, h2 {
 			margin: 20px 0;
@@ -28,34 +31,51 @@
 	</style>
 </head>
 <body>
-	<h1>jQuery fullPgBgImg: a jQuery plugin for full page background images</h1>
-	<p id="intro">
-		The Full page bg image article on the greatCoyer site inspired the development of this 
-		jQuery plugin.
-	</p>
-	<p>Spawned and spinoff of my new site redisign.</p>
-	<h2>Demo</h2>
-	<ul>
-		<li>This page</li>
-	</ul>
-	<h2>Usage</h2>
-	<h2>Downloads<h2>
-	<ul>
-		<li><a href=""></a>GitHub</li>
-		<li><a href=""></a></li>
-		<li><a href=""></a></li>
-		<li><a href=""></a></li>
-	</ul>
-	<h2>Under the hood</h2>
-	<p>Use several techniquesbut not yet implemented</p>
-	<p>Implement centering</p>
-	<p>
+	<a id="toggle-btn" href="#">Show/hide text</a>
+	<div id="page-wrap">
+		<h1>jQuery fullPgBgImg: a jQuery plugin for full page background images</h1>
+		<p id="intro">
+			The <a href="http://css-tricks.com/3458-perfect-full-page-background-image/">full page 
+			background image</a> article on <a href="http://css-tricks.com">CSS-Tricks</a> inspired the 
+			development of this jQuery plugin.
+		</p>
+		<h2>Demo</h2>
+		<ul>
+			<li><em>This page!</em> Click on the top link to toggle the visibility of this text.
+			Then play with the window size.
+			</li>
+		</ul>
+		<h2>Usage</h2>
+		<p>
+			Just pass the plugin the image url:
+			<code>
+				$.fullPgBgImg('foo.jpg');
+			</code>
+			More options coming soon.
+		</p>
+		
+		<h2>Downloads</h2>
+		<ul>
+			<li><a href="http://mgiulio.github.com/jquery-fullpgbgimg">GitHub</a></li>
+		</ul>
+		
+		<h2>Notes and under the hood</h2>
+		<p>Implement centering</p>
+		<p>Use of CSS3</p>
+		<p>The plugin is still in aStill in early stage</p>
+		<p>Use several techniquesbut not yet implemented</p>
+		
+	</div>
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 	<script>!window.jQuery && document.write('<script src="http://code.jquery.com/jquery-1.6.2.min.js"><\/script>');</script>
 	<script src="jquery.fullpgbgimg.js"></script>
 	<script>
-		$.fullpbbgimg('The_city_turns_Orange_by_gilad.jpg');
+		$('#toggle-btn').click(function() {
+			$('#page-wrap').toggle();
+			$(window).resize();
+		});
+		$.fullPgBgImg('food___by_laprovocation.jpg');
 	</script>
 </body>
 </html>
