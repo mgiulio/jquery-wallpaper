@@ -1,10 +1,9 @@
 (function($) {
 $.fullPgBgImg = function(image, usrCfg) {
 	var
-		cfg = { // Set default configuration
-			//image: '',
+		cfg = {
 		},
-		i, n, // Reusable vars
+		i, n,
 		techniques = [
 			{
 				name: 'CSS3 background-size',
@@ -54,10 +53,7 @@ $.fullPgBgImg = function(image, usrCfg) {
 						}
 					});
 					
-					/* img = $('<img src="' + cfg.image + '" alt="" style="position: fixed; top: 0; left: 0;">')
-						.prependTo('body'); */
 					img = new Image();
-					img.alt = '';
 					imgStyle = img.style;
 					imgStyle.position = 'fixed';
 					imgStyle.zIndex = -9999;
