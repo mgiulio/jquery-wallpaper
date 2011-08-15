@@ -6,9 +6,9 @@ $.fullPgBgImg = function(image, usrCfg) {
 		i, n,
 		techniques = [
 			{
-				name: 'CSS3 background-size',
+				name: 'CSS3',
 				isApplicable: function() {
-					if (!Modernizr)
+					if (Modernizr)
 						return Modernizr.backgroundsize;
 					else {
 						var 
@@ -39,7 +39,7 @@ $.fullPgBgImg = function(image, usrCfg) {
 				}
 			},
 			{
-				name: 'jQuery fallback',
+				name: 'jQuery',
 				isApplicable: function() {
 					return true;
 				},
@@ -85,7 +85,8 @@ $.fullPgBgImg = function(image, usrCfg) {
 					img.src = cfg.image;
 				}
 			}
-		]
+		],
+		numTechniques = techniques.length
 	;
 	
 	// Parameters juggling
@@ -98,13 +99,26 @@ $.fullPgBgImg = function(image, usrCfg) {
 			usrCfg.image = image;
 	$.extend(cfg, usrCfg);
 	
-	// Use the first feasible technique
-	// So, the techniques array must be sorted in ...
-	for (i = 0, n = techniques.length; i < n; ++i) {
-		if (techniques[i].isApplicable()) {
-			techniques[i].apply();
-			break;
+	var techApplied = false;
+	if (cfg.technique) {
+		for (i = 0; i < numTechniques; ++i) {
+			var t = techniques[i];
+			if (t.name == cfg.technique) {
+				if (t.isApplicable()) {
+					t.apply();
+					techApplied = true;
+				}
+				break;
+			}
 		}
 	}
+	if (!techApplied)
+		for (i = 0; i < numTechniques; ++i) {
+			var t = techniques[i];
+			if (t.isApplicable()) {
+				t.apply();
+				break;
+			}
+		}
 };
 })(jQuery);
