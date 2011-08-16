@@ -2,6 +2,12 @@
 $.fullPgBgImg = function(image, usrCfg) {
 	var
 		cfg = {
+			duration: 10000, // How much time an image is displayed(not counting transition time)
+			transition: { // To control the smooth change between images
+				effect: 'cross fade',
+				duration: 3000 // ms - The time the transition takes to complete
+				//easing:
+			}
 		},
 		i, n,
 		techniques = [
@@ -69,7 +75,14 @@ $.fullPgBgImg = function(image, usrCfg) {
 							imgStyle.top = '0px';
 						}
 					});
-					
+				
+					var
+						img = [],
+						visibleImg = 0
+						i = -1,
+						slideshow
+					;
+					// The front image
 					img = new Image();
 					imgStyle = img.style;
 					imgStyle.position = 'fixed';
@@ -83,6 +96,30 @@ $.fullPgBgImg = function(image, usrCfg) {
 						$(this).appendTo('body').fadeIn(2000);
 					};
 					img.src = cfg.image;
+					
+					// Do we need a slideshow?
+					if (slideshow) {
+						img = [img];
+						img.push(
+							$('<img src="' + cfg.images[++i] + '" alt="" style="position: fixed; top: 0; left: 0;">')
+							.prependTo('body')
+						);
+						visibleImg++;
+						
+						window.setTimeout(function f() {
+							var nextImageUrl = cfg.images[i = (i+1) % numImages];
+								$.when(
+									img[visibleImg].fadeOut(cfg.transition.duration),
+									img[1-visibleImg].fadeIn(cfg.transition.duration)
+								).done(function() {
+									img[visibleImg].attr('src', nextImageUrl);
+									visibleImg = 1 - visibleImg;
+									aspectRatio = img[visibleImg].width() / img[visibleImg].height();
+									//w.resize();
+									window.setTimeout(f, cfg.duration);
+								});
+						}, cfg.duration);
+					}
 				}
 			}
 		],
