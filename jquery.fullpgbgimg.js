@@ -7,7 +7,7 @@ $.fullPgBgImg = function() {
 			{
 				name: 'CSS3',
 				isApplicable: function() {
-					if (Modernizr)
+					if (typeof Modernizr !== 'undefined')
 						return Modernizr.backgroundsize;
 					else {
 						var 
@@ -28,7 +28,7 @@ $.fullPgBgImg = function() {
 				},
 				apply: function() {
 					$('html').css({
-						'background-image': 'url(' + cfg.image + ')',
+						'background-image': 'url(' + cfg.images[0] + ')',
 						'background-attachment': 'fixed',
 						'background-position': 'center center',
 						'background-repeat': 'no-repeat',
@@ -56,7 +56,7 @@ $.fullPgBgImg = function() {
 					wnd.resize(function() {
 						var 
 							wndWidth = wnd.width(),
-							wndHeight = wnd.height(),
+							wndHeight = wnd.height()
 						;
 						
 						im = img[visibleImg].get(0);
@@ -102,7 +102,7 @@ $.fullPgBgImg = function() {
 						imStyle.display = 'none';
 						$(im).appendTo('body');
 						im.src = cfg.images[1];
-						img.push($(im1));
+						img.push($(im));
 						
 						visibleImg = 0;
 						nextImage = 0;
@@ -116,7 +116,7 @@ $.fullPgBgImg = function() {
 									img[visibleImg].attr('src', nextImageUrl);
 									visibleImg = 1 - visibleImg;
 									aspectRatio = img[visibleImg].width() / img[visibleImg].height();
-									w.resize();
+									wnd.resize();
 									window.setTimeout(f, cfg.duration);
 								});
 						}, cfg.duration);
@@ -126,10 +126,13 @@ $.fullPgBgImg = function() {
 		],
 		numTechniques = techniques.length,
 		numImages = cfg.images.length,
-		slideshow = numImages > 1
+		slideshow = numImages > 1,
+		techApplied = false
 	;
 	
-	var techApplied = false;
+	if (slideshow)
+		cfg.technique = 'jQuery';
+		
 	if (cfg.technique) {
 		for (i = 0; i < numTechniques; ++i) {
 			var t = techniques[i];
@@ -155,7 +158,7 @@ $.fullPgBgImg = function() {
 function getConfig(args) {
 	var
 		cfg = {
-			images: []
+			images: [],
 			duration: 10000, // How much time an image is displayed(not counting transition time)
 			transition: { // To control the smooth change between images
 				effect: 'cross fade',
@@ -163,14 +166,13 @@ function getConfig(args) {
 				//easing:
 			}
 		},
-		o = args[1]
+		o
 	;
 	
-	// if images is string 0> images= [images];
-	if (typeof args[0] === 'object')
+	if (typeof args[0] === 'object' && !$.isArray(args[0]))
 		o = args[0];
 	else {
-		if ($.isString(args[0])
+		if (typeof args[0] === 'string')
 			args[0] = [args[0]];
 		if (!o)
 			o = {images: args[0]};
