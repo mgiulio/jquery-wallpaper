@@ -1,14 +1,7 @@
 (function($) {
-$.fullPgBgImg = function(image, usrCfg) {
+$.fullPgBgImg = function() {
 	var
-		cfg = {
-			duration: 10000, // How much time an image is displayed(not counting transition time)
-			transition: { // To control the smooth change between images
-				effect: 'cross fade',
-				duration: 3000 // ms - The time the transition takes to complete
-				//easing:
-			}
-		},
+		cfg = getConfig(arguments),
 		i, n,
 		techniques = [
 			{
@@ -52,64 +45,67 @@ $.fullPgBgImg = function(image, usrCfg) {
 				apply: function() {
 					var
 						img = [],
+						im,
+						imStyle,
 						wnd = $(window),
 						aspectRatio,
-						visibleImg = 0
+						visibleImg = 0,
+						nextImage
 					;
 					
 					wnd.resize(function() {
 						var 
 							wndWidth = wnd.width(),
 							wndHeight = wnd.height(),
-							im = img[visibleImg].get(0),
-							style = im.style
 						;
+						
+						im = img[visibleImg].get(0);
+						imStyle = im.style;
+						
 						if (aspectRatio < wndWidth / wndHeight) {
 							im.width = wndWidth;
 							im.height = wndWidth / aspectRatio;
-							style.top = (wndHeight - img.height)/2 + 'px';
-							style.left = '0px';
+							imStyle.top = (wndHeight - im.height)/2 + 'px';
+							imStyle.left = '0px';
 						}
 						else {
 							im = wndHeight;
 							im = wndHeight * aspectRatio;
-							style.left = (wndWidth - img.width)/2 + 'px';
-							style.top = '0px';
+							imStyle.left = (wndWidth - im.width)/2 + 'px';
+							imStyle.top = '0px';
 						}
 					});
 				
 					// The front image
 					im = new Image();
-					imgStyle = im.style;
-					imgStyle.position = 'fixed';
-					imgStyle.zIndex = -9999;
-					imgStyle.top = '0px';
-					imgStyle.left = '0px';
-					imgStyle.display = 'none';
+					imStyle = im.style;
+					imStyle.position = 'fixed';
+					imStyle.zIndex = -9999;
+					imStyle.top = '0px';
+					imStyle.left = '0px';
+					imStyle.display = 'none';
 					im.onload = function() {
 						aspectRatio = this.width / this.height;
 						wnd.resize();
 						$(this).appendTo('body').fadeIn(2000);
 					};
-					img.src = cfg.images[0];
-					
+					im.src = cfg.images[0];
 					img.push($(im));
 					
 					if (slideshow) {
-						img1 = new Image();
-						imgStyle = img1.style;
-						imgStyle.position = 'fixed';
-						imgStyle.zIndex = -10000;
-						imgStyle.top = '0px';
-						imgStyle.left = '0px';
-						imgStyle.display = 'none';
-						$(img1).appendTo('body');
-						img1.src = cfg.image[1];
-						
-						img.push($(img1));
+						im = new Image();
+						imStyle = im.style;
+						imStyle.position = 'fixed';
+						imStyle.zIndex = -10000;
+						imStyle.top = '0px';
+						imStyle.left = '0px';
+						imStyle.display = 'none';
+						$(im).appendTo('body');
+						im.src = cfg.images[1];
+						img.push($(im1));
 						
 						visibleImg = 0;
-						nextImage = 1;
+						nextImage = 0;
 						
 						window.setTimeout(function f() {
 							var nextImageUrl = cfg.images[i = (i+1) % numImages];
@@ -128,20 +124,10 @@ $.fullPgBgImg = function(image, usrCfg) {
 				}
 			}
 		],
-		numTechniques = techniques.length
+		numTechniques = techniques.length,
+		numImages = cfg.images.length,
+		slideshow = numImages > 1
 	;
-	
-	// TODO: image ->images
-	// if images is string 0> images= [images];
-	// Parameters juggling
-	if (typeof image === 'object')
-		usrCfg = image;
-	else if (typeof image === 'string')
-		if (!usrCfg)
-			usrCfg = {image: image};
-		else 
-			usrCfg.image = image;
-	$.extend(cfg, usrCfg);
 	
 	var techApplied = false;
 	if (cfg.technique) {
@@ -165,4 +151,36 @@ $.fullPgBgImg = function(image, usrCfg) {
 			}
 		}
 };
+
+function getConfig(args) {
+	var
+		cfg = {
+			images: []
+			duration: 10000, // How much time an image is displayed(not counting transition time)
+			transition: { // To control the smooth change between images
+				effect: 'cross fade',
+				duration: 3000 // ms - The time the transition takes to complete
+				//easing:
+			}
+		},
+		o = args[1]
+	;
+	
+	// if images is string 0> images= [images];
+	if (typeof args[0] === 'object')
+		o = args[0];
+	else {
+		if ($.isString(args[0])
+			args[0] = [args[0]];
+		if (!o)
+			o = {images: args[0]};
+		else 
+			o.images = args[0];
+	}
+	
+	$.extend(cfg, o);
+	
+	return cfg;
+}
+
 })(jQuery);
