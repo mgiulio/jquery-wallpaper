@@ -53,28 +53,7 @@ $.fullPgBgImg = function() {
 						nextImage
 					;
 					
-					wnd.resize(function() {
-						var 
-							wndWidth = wnd.width(),
-							wndHeight = wnd.height()
-						;
-						
-						im = img[visibleImg].get(0);
-						imStyle = im.style;
-						
-						if (aspectRatio < wndWidth / wndHeight) {
-							im.width = wndWidth;
-							im.height = wndWidth / aspectRatio;
-							imStyle.top = (wndHeight - im.height)/2 + 'px';
-							imStyle.left = '0px';
-						}
-						else {
-							im = wndHeight;
-							im = wndHeight * aspectRatio;
-							imStyle.left = (wndWidth - im.width)/2 + 'px';
-							imStyle.top = '0px';
-						}
-					});
+					wnd.resize(stretchImage);
 				
 					// The front image
 					im = new Image();
@@ -89,8 +68,8 @@ $.fullPgBgImg = function() {
 						wnd.resize();
 						$(this).appendTo('body').fadeIn(2000);
 					};
-					im.src = cfg.images[0];
 					img.push($(im));
+					im.src = cfg.images[0];
 					
 					if (slideshow) {
 						im = new Image();
@@ -109,17 +88,41 @@ $.fullPgBgImg = function() {
 						
 						window.setTimeout(function f() {
 							var nextImageUrl = cfg.images[i = (i+1) % numImages];
-								$.when(
-									img[visibleImg].fadeOut(cfg.transition.duration),
-									img[1-visibleImg].fadeIn(cfg.transition.duration)
-								).done(function() {
-									img[visibleImg].attr('src', nextImageUrl);
-									visibleImg = 1 - visibleImg;
-									aspectRatio = img[visibleImg].width() / img[visibleImg].height();
-									wnd.resize();
-									window.setTimeout(f, cfg.duration);
-								});
+							
+							stretchImage(1-visibleImg);
+							
+							$.when(
+								img[visibleImg].fadeOut(cfg.transition.duration),
+								img[1-visibleImg].fadeIn(cfg.transition.duration)
+							).done(function() {
+								img[visibleImg].attr('src', nextImageUrl);
+								visibleImg = 1 - visibleImg;
+								window.setTimeout(f, cfg.duration);
+							});
 						}, cfg.duration);
+					}
+					
+					function stretchImage(i) {
+						var 
+							wndWidth = wnd.width(),
+							wndHeight = wnd.height(),
+							im = img[(typeof i !== 'undefined') ? i : visibleImg].get(0),
+							imStyle = im.style,
+							aspectRatio = im.width / img.height
+						;
+						
+						if (aspectRatio < wndWidth / wndHeight) {
+							im.width = wndWidth;
+							im.height = wndWidth / aspectRatio;
+							imStyle.top = (wndHeight - im.height)/2 + 'px';
+							imStyle.left = '0px';
+						}
+						else {
+							im = wndHeight;
+							im = wndHeight * aspectRatio;
+							imStyle.left = (wndWidth - im.width)/2 + 'px';
+							imStyle.top = '0px';
+						}
 					}
 				}
 			}
