@@ -51,60 +51,65 @@ $.fullPgBgImg = function(image, usrCfg) {
 				},
 				apply: function() {
 					var
-						img,
+						img = [],
 						wnd = $(window),
 						aspectRatio,
-						imgStyle
+						visibleImg = 0
 					;
 					
 					wnd.resize(function() {
 						var 
 							wndWidth = wnd.width(),
-							wndHeight = wnd.height()
+							wndHeight = wnd.height(),
+							im = img[visibleImg].get(0),
+							style = im.style
 						;
 						if (aspectRatio < wndWidth / wndHeight) {
-							img.width = wndWidth;
-							img.height = wndWidth / aspectRatio;
-							imgStyle.top = (wndHeight - img.height)/2 + 'px';
-							imgStyle.left = '0px';
+							im.width = wndWidth;
+							im.height = wndWidth / aspectRatio;
+							style.top = (wndHeight - img.height)/2 + 'px';
+							style.left = '0px';
 						}
 						else {
-							img.height = wndHeight;
-							img.width = wndHeight * aspectRatio;
-							imgStyle.left = (wndWidth - img.width)/2 + 'px';
-							imgStyle.top = '0px';
+							im = wndHeight;
+							im = wndHeight * aspectRatio;
+							style.left = (wndWidth - img.width)/2 + 'px';
+							style.top = '0px';
 						}
 					});
 				
-					var
-						img = [],
-						visibleImg = 0
-						i = -1,
-						slideshow
-					;
 					// The front image
-					img = new Image();
-					imgStyle = img.style;
+					im = new Image();
+					imgStyle = im.style;
 					imgStyle.position = 'fixed';
 					imgStyle.zIndex = -9999;
 					imgStyle.top = '0px';
 					imgStyle.left = '0px';
 					imgStyle.display = 'none';
-					img.onload = function() {
+					im.onload = function() {
 						aspectRatio = this.width / this.height;
 						wnd.resize();
 						$(this).appendTo('body').fadeIn(2000);
 					};
-					img.src = cfg.image;
+					img.src = cfg.images[0];
 					
-					// Do we need a slideshow?
+					img.push($(im));
+					
 					if (slideshow) {
-						img = [img];
-						img.push(
-							$('<img src="' + cfg.images[++i] + '" alt="" style="position: fixed; top: 0; left: 0;">')
-							.prependTo('body')
-						);
-						visibleImg++;
+						img1 = new Image();
+						imgStyle = img1.style;
+						imgStyle.position = 'fixed';
+						imgStyle.zIndex = -10000;
+						imgStyle.top = '0px';
+						imgStyle.left = '0px';
+						imgStyle.display = 'none';
+						$(img1).appendTo('body');
+						img1.src = cfg.image[1];
+						
+						img.push($(img1));
+						
+						visibleImg = 0;
+						nextImage = 1;
 						
 						window.setTimeout(function f() {
 							var nextImageUrl = cfg.images[i = (i+1) % numImages];
@@ -115,7 +120,7 @@ $.fullPgBgImg = function(image, usrCfg) {
 									img[visibleImg].attr('src', nextImageUrl);
 									visibleImg = 1 - visibleImg;
 									aspectRatio = img[visibleImg].width() / img[visibleImg].height();
-									//w.resize();
+									w.resize();
 									window.setTimeout(f, cfg.duration);
 								});
 						}, cfg.duration);
@@ -126,6 +131,8 @@ $.fullPgBgImg = function(image, usrCfg) {
 		numTechniques = techniques.length
 	;
 	
+	// TODO: image ->images
+	// if images is string 0> images= [images];
 	// Parameters juggling
 	if (typeof image === 'object')
 		usrCfg = image;
