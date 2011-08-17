@@ -1,5 +1,5 @@
 (function($) {
-$.fullPgBgImg = function() {
+$.wallpaper = function() {
 	var
 		cfg = getConfig(arguments),
 		i, n,
