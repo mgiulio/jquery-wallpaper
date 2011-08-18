@@ -65,7 +65,6 @@ $.wallpaper = function() {
 							} while (!imgMetadata[nextImage].loaded && nextImage != currImage)
 							
 							if (nextImage == currImage) {
-							console.log('skipped');
 								window.setTimeout(f, cfg.duration);
 								return;
 							}
@@ -100,8 +99,8 @@ $.wallpaper = function() {
 							style.left = '0px';
 						}
 						else {
-							img = wndHeight;
-							img = wndHeight * aspectRatio;
+							img.height = wndHeight;
+							img.width = wndHeight * aspectRatio;
 							style.left = (wndWidth - img.width)/2 + 'px';
 							style.top = '0px';
 						}
