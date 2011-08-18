@@ -44,85 +44,142 @@ $.wallpaper = function() {
 				},
 				apply: function() {
 					var
-						img = [],
-						im,
-						imStyle,
+						dblBuff = [],
+						imgMetadata = [],
 						wnd = $(window),
-						aspectRatio,
-						visibleImg = 0,
-						nextImage
+						visibleBuff,
+						currImage // The index of the image currently displayed by the slideshow
 					;
 					
-					wnd.resize(stretchImage);
-				
-					// The front image
-					im = new Image();
-					imStyle = im.style;
-					imStyle.position = 'fixed';
-					imStyle.zIndex = -9999;
-					imStyle.top = '0px';
-					imStyle.left = '0px';
-					imStyle.display = 'none';
-					im.onload = function() {
-						aspectRatio = this.width / this.height;
-						wnd.resize();
-						$(this).appendTo('body').fadeIn(2000);
-					};
-					img.push($(im));
-					im.src = cfg.images[0];
-					
+					createDoubleBuffer(slideshow);
+					preloadImages();
 					if (slideshow) {
-						im = new Image();
-						imStyle = im.style;
-						imStyle.position = 'fixed';
-						imStyle.zIndex = -10000;
-						imStyle.top = '0px';
-						imStyle.left = '0px';
-						imStyle.display = 'none';
-						$(im).appendTo('body');
-						im.src = cfg.images[1];
-						img.push($(im));
-						
-						visibleImg = 0;
-						nextImage = 0;
-						
 						window.setTimeout(function f() {
-							var nextImageUrl = cfg.images[i = (i+1) % numImages];
+							var 
+								nextImage = currImage
+							;
 							
-							stretchImage(1-visibleImg);
+							// Find the next available image
+							do {
+								nextImage = (nextImage + 1) % numImages;
+							} while (!imgMetadata[nextImage].loaded && nextImage != currImage)
 							
+							if (nextImage == currImage) {
+							console.log('skipped');
+								window.setTimeout(f, cfg.duration);
+								return;
+							}
+							
+							// Setup the next image in the hidden buffer
+							dblBuff[1-visibleBuff].attr('src', imgMetadata[nextImage].url);
+							stretchImage(dblBuff[1-visibleBuff].get(0), imgMetadata[nextImage].aspectRatio);
+							
+							// Fire the transition
 							$.when(
-								img[visibleImg].fadeOut(cfg.transition.duration),
-								img[1-visibleImg].fadeIn(cfg.transition.duration)
+								dblBuff[visibleBuff].fadeOut(cfg.transition.duration),
+								dblBuff[1-visibleBuff].fadeIn(cfg.transition.duration)
 							).done(function() {
-								img[visibleImg].attr('src', nextImageUrl);
-								visibleImg = 1 - visibleImg;
+								visibleBuff = 1 - visibleBuff;
+								currImage = nextImage;
 								window.setTimeout(f, cfg.duration);
 							});
 						}, cfg.duration);
 					}
 					
-					function stretchImage(i) {
+					function stretchImage(img, aspectRatio) {
 						var 
 							wndWidth = wnd.width(),
 							wndHeight = wnd.height(),
-							im = img[(typeof i !== 'undefined') ? i : visibleImg].get(0),
-							imStyle = im.style,
-							aspectRatio = im.width / img.height
+							style = img.style
 						;
 						
 						if (aspectRatio < wndWidth / wndHeight) {
-							im.width = wndWidth;
-							im.height = wndWidth / aspectRatio;
-							imStyle.top = (wndHeight - im.height)/2 + 'px';
-							imStyle.left = '0px';
+							img.width = wndWidth;
+							img.height = wndWidth / aspectRatio;
+							style.top = (wndHeight - img.height)/2 + 'px';
+							style.left = '0px';
 						}
 						else {
-							im = wndHeight;
-							im = wndHeight * aspectRatio;
-							imStyle.left = (wndWidth - im.width)/2 + 'px';
-							imStyle.top = '0px';
+							img = wndHeight;
+							img = wndHeight * aspectRatio;
+							style.left = (wndWidth - img.width)/2 + 'px';
+							style.top = '0px';
 						}
+					}
+					
+					function preloadImages() {
+						var 
+							img,
+							i
+						;
+						
+						for (i = 0; i < numImages; i++) {
+							imgMetadata.push({
+								url: cfg.images[i], 
+								loaded: false,
+								aspectRatio: undefined
+							});
+							
+							img = new Image();
+							
+							img.wallpaperIndex = i;
+							img.onload = function() {
+								imgMetadata[this.wallpaperIndex].loaded = true;
+								imgMetadata[this.wallpaperIndex].aspectRatio = this.width / this.height;
+								$(document).trigger('imageLoaded', this.wallpaperIndex);
+							};
+							
+							img.src = cfg.images[i];
+						}
+					}
+					
+					function createDoubleBuffer(dbl) {
+						var
+							im,
+							imStyle
+						;
+						
+						im = new Image();
+						imStyle = im.style;
+						imStyle.position = 'fixed';
+						imStyle.zIndex = -9999;
+						imStyle.top = '0px';
+						imStyle.left = '0px';
+						imStyle.display = 'none';
+						
+						dblBuff.push($(im).appendTo('body').hide());
+						
+						if (dbl) {
+							im = new Image();
+							imStyle = im.style;
+							imStyle.position = 'fixed';
+							imStyle.zIndex = -10000;
+							imStyle.top = '0px';
+							imStyle.left = '0px';
+							imStyle.display = 'none';
+							
+							dblBuff.push($(im).appendTo('body').hide());
+						}
+						
+						$(document).one('imageLoaded', function(e, imageIndex) {
+							var 
+								im = dblBuff[0].get(0)
+							;
+							
+							im.src = imgMetadata[0].url;
+							
+							stretchImage(im, imgMetadata[0].aspectRatio);
+							
+							visibleBuff = 0;
+							currImage = imageIndex;
+							
+							$(im).fadeIn(cfg.transition.duration);
+							
+							wnd.resize(function() {
+								var im = dblBuff[visibleBuff].get(0);
+								stretchImage(im, imgMetadata[currImage].aspectRatio);
+							});
+						});
 					}
 				}
 			}
@@ -169,11 +226,14 @@ function getConfig(args) {
 				//easing:
 			}
 		},
-		o
+		o = args[1]
 	;
 	
-	if (typeof args[0] === 'object' && !$.isArray(args[0]))
+	if (typeof args[0] === 'object' && !$.isArray(args[0])) {
 		o = args[0];
+		if (typeof o.images === 'string')
+			o.images = [o.images];
+	}
 	else {
 		if (typeof args[0] === 'string')
 			args[0] = [args[0]];

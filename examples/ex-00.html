@@ -2,11 +2,9 @@
 
 <html>
 <head>
-	<title>jQuery fullPgBgImg: a jQuery plugin for full page background images</title>
+	<title>jQuery Wallpaper: a jQuery plugin for full page background images and slideshows</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<link href='http://fonts.googleapis.com/css?family=Coustard' rel='stylesheet' type='text/css'>
 	<style type="text/css">
-		*  { margin: 0; padding: 0;}
 		html {
 			background-color: #000;
 		}
@@ -15,19 +13,19 @@
 <body>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 	<script>!window.jQuery && document.write('<script src="http://code.jquery.com/jquery-1.6.2.min.js"><\/script>');</script>
-	<script src="../jquery.fullpgbgimg.js"></script>
+	<script src="../jquery.wallpaper.js"></script>
 	<script>
-		$('#toggle-btn').click(function() {
-			$('#page-wrap').toggle();
-			$(window).resize();
-		});
-		
-		$.fullPgBgImg([
+		$.wallpaper(
+		[
 			'img/food___by_laprovocation.jpg',
 			'img/Empire_City_by_gamefan84.jpg'
 		],
 		{
-			duration: 5000
+			duration: 2500,
+			transition: {
+				duration: 500
+			},
+			//images: 'img/Empire_City_by_gamefan84.jpg'
 		});
 	</script>
 </body>
