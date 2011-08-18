@@ -48,7 +48,8 @@ $.wallpaper = function() {
 						imgMetadata = [],
 						wnd = $(window),
 						visibleBuff,
-						currImage // The index of the image currently displayed by the slideshow
+						currImage, // The index of the image currently displayed by the slideshow
+						transitionPlaying
 					;
 					
 					createDoubleBuffer(slideshow);
@@ -70,14 +71,17 @@ $.wallpaper = function() {
 							}
 							
 							// Setup the next image in the hidden buffer
-							dblBuff[1-visibleBuff].attr('src', imgMetadata[nextImage].url);
-							stretchImage(dblBuff[1-visibleBuff].get(0), imgMetadata[nextImage].aspectRatio);
+							dblBuff[1-visibleBuff].img.attr('src', imgMetadata[nextImage].url);
+							dblBuff[1-visibleBuff].imageIndex = nextImage;
+							stretchImage(dblBuff[1-visibleBuff].img.get(0), imgMetadata[nextImage].aspectRatio);
 							
 							// Fire the transition
+							transitionPlaying = true;
 							$.when(
-								dblBuff[visibleBuff].fadeOut(cfg.transition.duration),
-								dblBuff[1-visibleBuff].fadeIn(cfg.transition.duration)
+								dblBuff[visibleBuff].img.fadeOut(cfg.transition.duration),
+								dblBuff[1-visibleBuff].img.fadeIn(cfg.transition.duration)
 							).done(function() {
+								transitionPlaying = false;
 								visibleBuff = 1 - visibleBuff;
 								currImage = nextImage;
 								window.setTimeout(f, cfg.duration);
@@ -146,7 +150,10 @@ $.wallpaper = function() {
 						imStyle.left = '0px';
 						imStyle.display = 'none';
 						
-						dblBuff.push($(im).appendTo('body').hide());
+						dblBuff.push({
+							img: $(im).appendTo('body').hide(),
+							imageIndex: undefined
+						});
 						
 						if (dbl) {
 							im = new Image();
@@ -157,12 +164,15 @@ $.wallpaper = function() {
 							imStyle.left = '0px';
 							imStyle.display = 'none';
 							
-							dblBuff.push($(im).appendTo('body').hide());
+							dblBuff.push({
+								img: $(im).appendTo('body').hide(),
+								imageIndex: undefined
+							});
 						}
 						
 						$(document).one('imageLoaded', function(e, imageIndex) {
 							var 
-								im = dblBuff[0].get(0)
+								im = dblBuff[0].img.get(0)
 							;
 							
 							im.src = imgMetadata[0].url;
@@ -175,8 +185,16 @@ $.wallpaper = function() {
 							$(im).fadeIn(cfg.transition.duration);
 							
 							wnd.resize(function() {
-								var im = dblBuff[visibleBuff].get(0);
-								stretchImage(im, imgMetadata[currImage].aspectRatio);
+								// If a transition is playing 
+								// we need to stretch both buffers
+								if (transitionPlaying) {
+									stretchImage(dblBuff[0].img.get(0), imgMetadata[dblBuff[0].imageIndex].aspectRatio);
+									stretchImage(dblBuff[1].img.get(0), imgMetadata[dblBuff[1].imageIndex].aspectRatio);
+								}
+								else {
+									// Stretch only the front(visible) buffer
+									stretchImage(dblBuff[visibleBuff].img.get(0), imgMetadata[currImage].aspectRatio);
+								}
 							});
 						});
 					}
