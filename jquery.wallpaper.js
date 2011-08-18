@@ -71,15 +71,15 @@ $.wallpaper = function() {
 							}
 							
 							// Setup the next image in the hidden buffer
-							dblBuff[1-visibleBuff].img.attr('src', imgMetadata[nextImage].url);
+							dblBuff[1-visibleBuff].img.src = imgMetadata[nextImage].url;
 							dblBuff[1-visibleBuff].imageIndex = nextImage;
-							stretchImage(dblBuff[1-visibleBuff].img.get(0), imgMetadata[nextImage].aspectRatio);
+							stretchImage(dblBuff[1-visibleBuff].img, imgMetadata[nextImage].aspectRatio);
 							
 							// Fire the transition
 							transitionPlaying = true;
 							$.when(
-								dblBuff[visibleBuff].img.fadeOut(cfg.transition.duration),
-								dblBuff[1-visibleBuff].img.fadeIn(cfg.transition.duration)
+								$(dblBuff[visibleBuff].img).fadeOut(cfg.transition.duration),
+								$(dblBuff[1-visibleBuff].img).fadeIn(cfg.transition.duration)
 							).done(function() {
 								transitionPlaying = false;
 								visibleBuff = 1 - visibleBuff;
@@ -151,7 +151,7 @@ $.wallpaper = function() {
 						imStyle.display = 'none';
 						
 						dblBuff.push({
-							img: $(im).appendTo('body').hide(),
+							img: $(im).appendTo('body').hide().get(0),
 							imageIndex: undefined
 						});
 						
@@ -165,14 +165,14 @@ $.wallpaper = function() {
 							imStyle.display = 'none';
 							
 							dblBuff.push({
-								img: $(im).appendTo('body').hide(),
+								img: $(im).appendTo('body').hide().get(0),
 								imageIndex: undefined
 							});
 						}
 						
 						$(document).one('imageLoaded', function(e, imageIndex) {
 							var 
-								im = dblBuff[0].img.get(0)
+								im = dblBuff[0].img
 							;
 							
 							im.src = imgMetadata[0].url;
@@ -188,12 +188,12 @@ $.wallpaper = function() {
 								// If a transition is playing 
 								// we need to stretch both buffers
 								if (transitionPlaying) {
-									stretchImage(dblBuff[0].img.get(0), imgMetadata[dblBuff[0].imageIndex].aspectRatio);
-									stretchImage(dblBuff[1].img.get(0), imgMetadata[dblBuff[1].imageIndex].aspectRatio);
+									stretchImage(dblBuff[0].img, imgMetadata[dblBuff[0].imageIndex].aspectRatio);
+									stretchImage(dblBuff[1].img, imgMetadata[dblBuff[1].imageIndex].aspectRatio);
 								}
 								else {
 									// Stretch only the front(visible) buffer
-									stretchImage(dblBuff[visibleBuff].img.get(0), imgMetadata[currImage].aspectRatio);
+									stretchImage(dblBuff[visibleBuff].img, imgMetadata[currImage].aspectRatio);
 								}
 							});
 						});
