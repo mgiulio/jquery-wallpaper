@@ -185,7 +185,7 @@ $.wallpaper = function() {
 							visibleBuff = 0;
 							currImage = imageIndex;
 							
-							$(im).fadeIn(cfg.transition.duration);
+							$(im).fadeIn(cfg.firstImageFadeInDuration);
 							
 							wnd.resize(function() {
 								// If a transition is playing 
@@ -244,7 +244,8 @@ function getConfig(args) {
 				effect: 'cross fade',
 				duration: 3000 // ms - The time the transition takes to complete
 				//easing:
-			}
+			},
+			firstImageFadeInDuration: 1000
 		},
 		o = args[1]
 	;
