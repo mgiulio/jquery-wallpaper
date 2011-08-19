@@ -263,7 +263,7 @@ function getConfig(args) {
 			o.images = args[0];
 	}
 	
-	$.extend(cfg, o);
+	$.extend(true, cfg, o);
 	
 	return cfg;
 }
