@@ -51,43 +51,46 @@ $.wallpaper = function() {
 						currImage, // The index of the image currently displayed by the slideshow
 						transitionPlaying
 					;
-					
+
 					createDoubleBuffer(slideshow);
+					
+					if (slideshow)
+						$(document).one('imageLoaded', function() {
+							window.setTimeout(function f() {
+								var 
+									nextImage = currImage
+								;
+								
+								// Find the next available image
+								do {
+									nextImage = (nextImage + 1) % numImages;
+								} while (!imgMetadata[nextImage].loaded && nextImage != currImage)
+								
+								if (nextImage == currImage) {
+									window.setTimeout(f, cfg.duration);
+									return;
+								}
+								
+								// Setup the next image in the hidden buffer
+								dblBuff[1-visibleBuff].img.src = imgMetadata[nextImage].url;
+								dblBuff[1-visibleBuff].imageIndex = nextImage;
+								stretchImage(dblBuff[1-visibleBuff].img, imgMetadata[nextImage].aspectRatio);
+								
+								// Fire the transition
+								transitionPlaying = true;
+								$.when(
+									$(dblBuff[visibleBuff].img).fadeOut(cfg.transition.duration),
+									$(dblBuff[1-visibleBuff].img).fadeIn(cfg.transition.duration)
+								).done(function() {
+									transitionPlaying = false;
+									visibleBuff = 1 - visibleBuff;
+									currImage = nextImage;
+									window.setTimeout(f, cfg.duration);
+								});
+							}, cfg.duration);
+						});
+					
 					preloadImages();
-					if (slideshow) {
-						window.setTimeout(function f() {
-							var 
-								nextImage = currImage
-							;
-							
-							// Find the next available image
-							do {
-								nextImage = (nextImage + 1) % numImages;
-							} while (!imgMetadata[nextImage].loaded && nextImage != currImage)
-							
-							if (nextImage == currImage) {
-								window.setTimeout(f, cfg.duration);
-								return;
-							}
-							
-							// Setup the next image in the hidden buffer
-							dblBuff[1-visibleBuff].img.src = imgMetadata[nextImage].url;
-							dblBuff[1-visibleBuff].imageIndex = nextImage;
-							stretchImage(dblBuff[1-visibleBuff].img, imgMetadata[nextImage].aspectRatio);
-							
-							// Fire the transition
-							transitionPlaying = true;
-							$.when(
-								$(dblBuff[visibleBuff].img).fadeOut(cfg.transition.duration),
-								$(dblBuff[1-visibleBuff].img).fadeIn(cfg.transition.duration)
-							).done(function() {
-								transitionPlaying = false;
-								visibleBuff = 1 - visibleBuff;
-								currImage = nextImage;
-								window.setTimeout(f, cfg.duration);
-							});
-						}, cfg.duration);
-					}
 					
 					function stretchImage(img, aspectRatio) {
 						var 
