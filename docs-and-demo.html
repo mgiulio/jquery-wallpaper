@@ -30,6 +30,7 @@
 		}
 		p {
 			line-height: 1.5;
+			margin: 1em 0;
 		}
 		a {
 			color: #ffa500;
@@ -52,51 +53,79 @@
 <body>
 	<a id="toggle-btn" href="#">Show/hide text</a>
 	<div id="page-wrap">
-		<h1>jQuery Wallpaper: a jQuery plugin for full page background images andslideshows</h1>
+		<h1>jQuery Wallpaper: a jQuery Plugin for Full Page Background Images and Slideshows</h1>
 		
-		<h2>About</h2>
-		<p id="intro">
-			The <a href="http://css-tricks.com/3458-perfect-full-page-background-image/">full page 
-			background image</a> article on <a href="http://css-tricks.com">CSS-Tricks</a> inspired the 
-			development of this jQuery plugin.
-		</p>
-		<p>
-			Not only slideshow
-		</p>
+		<div id="about">
+			<h2>About</h2>
+			<p>
+				This jQuery plugin will put a full page background image that resize itself to 
+				adapt to the window size.
+			</p>
+			<p>
+				It is also possible to use several images and to cycle between them with a simple slideshow.
+			</p>
+		</div>
 		
-		<h2>Demo</h2>
-		<ul>
-			<li><em>This page!</em> Click on the top link to toggle the visibility of this text.
-			Then play with the window size.
-			</li>
-		</ul>
-		<h2>Usage</h2>
-		<p>
-			Just pass the plugin the image url:
-			<code>
-				$.wallpaper('foo.jpg');
-			</code>
-			The configuration object
-		</p>
-		<p>
-			Custom events
-		</p>
+		<div id="demo">
+			<h2>Demo</h2>
+			<p>
+				Try to resize the browser window now.<br>
+				Click on the top link to toggle the visibility of the page foreground.
+			</p>
+		</div>
 		
-		<h2>Downloads</h2>
-		<ul>
-			<li><a href="http://mgiulio.github.com/jquery-wallpaper">GitHub</a></li>
-		</ul>
+		<div id="usage">
+			<h2>Usage</h2>
+			<p>
+				Just pass the plugin the image url:
+				<code>
+					$.wallpaper('foo.jpg');
+				</code>
+				The configuration object
+			</p>
+			<p>
+				Custom events
+			</p>
+		</div>
+		
+		<div id="downloads">
+			<h2>Downloads</h2>
+			<ul>
+				<li><a href="http://mgiulio.github.com/jquery-wallpaper">GitHub</a></li>
+			</ul>
+		</div>
 		
 		<h2>Browser tested and issues</h2>
 		
-		<h2>In the Wild</h2>
+		<div id="in-the-wild">
+			<h2>In the Wild</h2>
+			<p>
+				If you use this plugin somewhere feel free to send methe link. I'll put it here.
+			</p>
+		</div>
 		
-		<h2>Related andprior works</h2>
+		<div id="works">
+			<h2>Related and prior works</h2>
+			<p>
+			</p>
+		</div>
 		
-		<h2>Notes and under the hood</h2>
-		<p>
-			Coming soon.
-		</p>
+		<div id="under-the-hood">
+			<h2>Background and under the hood notes</h2>
+			<p>
+				The <a href="http://css-tricks.com/3458-perfect-full-page-background-image/">full page 
+				background image</a> article on <a href="http://css-tricks.com">CSS-Tricks</a> inspired the 
+				development of this jQuery plugin.
+			</p>
+			<p>
+				Mention landing pages.
+			</p>
+			<p>
+				More precisly: 
+					risize and stech as the broeser window resize
+					stretch mainainng the aspectatio
+			</p>
+		</div>
 		
 		<h1 style="text-align:center;">HAPPY CODING</h1>
 	</div>
@@ -112,11 +141,12 @@
 		
 		$.wallpaper(
 		[
+			'test-images/amsler-grid.gif',
 			'test-images/food___by_laprovocation.jpg',
 			'test-images/Empire_City_by_gamefan84.jpg',
 			'test-images/toys_by_momoclax.jpg',
 			'test-images/24cc2a06f45046251e26062ff89d4b3f.jpg',
-			'test-images/amsler_grid.gif',
+			
 			'test-images/css-tricks.jpg',
 			'test-images/escher_grid.jpg',
 			'test-images/Miami_City_by_Furiousxr.jpg',
