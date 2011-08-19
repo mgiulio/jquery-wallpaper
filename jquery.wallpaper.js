@@ -55,7 +55,7 @@ $.wallpaper = function() {
 					createDoubleBuffer(slideshow);
 					
 					if (slideshow)
-						$(document).one('imageLoaded', function() {
+						$(document).one('readyToStartSlideshow', function() {
 							window.setTimeout(function f() {
 								var 
 									nextImage = currImage
@@ -185,7 +185,9 @@ $.wallpaper = function() {
 							visibleBuff = 0;
 							currImage = imageIndex;
 							
-							$(im).fadeIn(cfg.firstImageFadeInDuration);
+							$(im).fadeIn(cfg.firstImageFadeInDuration, function() {
+								$(document).trigger('readyToStartSlideshow');
+							});
 							
 							wnd.resize(function() {
 								// If a transition is playing 
