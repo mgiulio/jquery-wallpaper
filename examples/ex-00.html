@@ -4,17 +4,108 @@
 <head>
 	<title>jQuery Wallpaper: a jQuery plugin for full page background images and slideshows</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link href='http://fonts.googleapis.com/css?family=Coustard' rel='stylesheet' type='text/css'>
 	<style type="text/css">
+		*  { margin: 0; padding: 0;}
 		html {
 			background-color: #000;
+		}
+		body {
+			font-family: 'Coustard', serif;
+		}
+		#page-wrap {
+			width: 720px;
+			margin: 0 auto;
+			background-color: #fff;
+			border: 1px solid #aaa;
+			padding: 20px;
+			margin-top: 80px;
+		}
+		h1, h2 {
+			margin: 20px 0;
+			color: #d26262;
+		}
+		h1 {
+			text-shadow: 1px 3px 1px #000;
+		}
+		p {
+			line-height: 1.5;
+		}
+		a {
+			color: #ffa500;
+			text-decoration: none;
+		}
+		a:hover {
+			text-decoration: underline;
+		}
+		a:visited {
+			color: #d67600;
+		}
+		a:active{
+			color: #ffff00;
+		}
+		ul {
+			margin-left: 3em;
 		}
 	</style>
 </head>
 <body>
+	<a id="toggle-btn" href="#">Show/hide text</a>
+	<div id="page-wrap">
+		<h1>jQuery fullPgBgImg: a jQuery plugin for full page background images</h1>
+		
+		<h2>About</h2>
+		<p id="intro">
+			The <a href="http://css-tricks.com/3458-perfect-full-page-background-image/">full page 
+			background image</a> article on <a href="http://css-tricks.com">CSS-Tricks</a> inspired the 
+			development of this jQuery plugin.
+		</p>
+		<p>
+			Not only slideshow
+		</p>
+		
+		<h2>Demo</h2>
+		<ul>
+			<li><em>This page!</em> Click on the top link to toggle the visibility of this text.
+			Then play with the window size.
+			</li>
+		</ul>
+		<h2>Usage</h2>
+		<p>
+			Just pass the plugin the image url:
+			<code>
+				$.wallpaper('foo.jpg');
+			</code>
+			The configuration object
+		</p>
+		<p>
+			Custom events
+		</p>
+		
+		<h2>Downloads</h2>
+		<ul>
+			<li><a href="http://mgiulio.github.com/jquery-fullpgbgimg">GitHub</a></li>
+		</ul>
+		
+		<h2>Browser tested and issues</h2>
+		
+		<h2>Notes and under the hood</h2>
+		<p>
+			Coming soon.
+		</p>
+		
+		<h1 style="text-align:center;">HAPPY CODING</h1>
+	</div>
+	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 	<script>!window.jQuery && document.write('<script src="http://code.jquery.com/jquery-1.6.2.min.js"><\/script>');</script>
 	<script src="../jquery.wallpaper.js"></script>
 	<script>
+		$('#toggle-btn').click(function() {
+			$('#page-wrap').toggle();
+			$(window).resize();
+		});
+		
 		$.wallpaper(
 		[
 			'img/food___by_laprovocation.jpg',
@@ -31,11 +122,10 @@
 			//'img/.jpg'
 		],
 		{
-			duration: 2000,
+			duration: 5000,
 			transition: {
-				duration: 1000
-			},
-			firstImageFadeInDuration: 7000
+				duration: 7000
+			}
 			//images: 'img/Empire_City_by_gamefan84.jpg'
 		});
 	</script>
