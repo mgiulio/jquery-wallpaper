@@ -67,7 +67,7 @@ $.wallpaper = function() {
 								} while (!imgMetadata[nextImage].loaded && nextImage != currImage)
 								
 								if (nextImage == currImage) {
-									window.setTimeout(f, cfg.duration);
+									window.setTimeout(f, cfg.imageDuration);
 									return;
 								}
 								
@@ -79,15 +79,15 @@ $.wallpaper = function() {
 								// Fire the transition
 								transitionPlaying = true;
 								$.when(
-									$(dblBuff[visibleBuff].img).fadeOut(cfg.transition.duration),
-									$(dblBuff[1-visibleBuff].img).fadeIn(cfg.transition.duration)
+									$(dblBuff[visibleBuff].img).fadeOut(cfg.transitionDuration),
+									$(dblBuff[1-visibleBuff].img).fadeIn(cfg.transitionDuration)
 								).done(function() {
 									transitionPlaying = false;
 									visibleBuff = 1 - visibleBuff;
 									currImage = nextImage;
-									window.setTimeout(f, cfg.duration);
+									window.setTimeout(f, cfg.imageDuration);
 								});
-							}, cfg.duration);
+							}, cfg.imageDuration);
 						});
 					
 					preloadImages();
@@ -239,14 +239,10 @@ $.wallpaper = function() {
 
 function getConfig(args) {
 	var
-		cfg = {
+		cfg = { // All time are expressed in milliseconds
 			images: [],
-			duration: 10000, // How much time an image is displayed(not counting transition time)
-			transition: { // To control the smooth change between images
-				effect: 'cross fade',
-				duration: 3000 // ms - The time the transition takes to complete
-				//easing:
-			},
+			imageDuration: 5000, // How much time an image is displayed(not counting transition time)
+			transitionDuration: 7000, // The time the transition takes to complete
 			firstImageFadeInDuration: 1000
 		},
 		o = args[1]

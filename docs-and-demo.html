@@ -48,6 +48,16 @@
 		ul {
 			margin-left: 3em;
 		}
+		code {
+			display: block;
+			width: 75%;
+			margin: 1em auto;
+			background-color: #000;
+			border: 1pxsolid #aaaaaa;
+			color: orange;
+			fonta-family: monospace;
+			padding: 10px;
+		}
 	</style>
 </head>
 <body>
@@ -58,7 +68,7 @@
 		<div id="about">
 			<h2>About</h2>
 			<p>
-				This jQuery plugin will put a full page background image that resize itself to 
+				This jQuery plugin will display a full page background image that resize itself to 
 				adapt to the window size.
 			</p>
 			<p>
@@ -77,15 +87,35 @@
 		<div id="usage">
 			<h2>Usage</h2>
 			<p>
-				Just pass the plugin the image url:
-				<code>
-					$.wallpaper('foo.jpg');
-				</code>
-				The configuration object
+				Here is anexample from this page. Here we are using plugin default options:
 			</p>
+			<code>
+				<pre>
+$.wallpaper([
+	'test-images/amsler-grid.gif',
+	'test-images/food___by_laprovocation.jpg',
+	'test-images/Empire_City_by_gamefan84.jpg',
+	'test-images/toys_by_momoclax.jpg',
+	'test-images/escher_grid.jpg',
+	'test-images/Miami_City_by_Furiousxr.jpg',
+	'test-images/pieces-of-me.jpg',
+	'test-images/toys_by_hcube.jpg'
+]);
+				</pre>
+			</code>
 			<p>
-				Custom events
+				The available options are:
 			</p>
+			<code>
+				<pre>
+{ // All time are expressed in milliseconds
+	images: [],
+	imageDuration: 5000, // How much time an image is displayed(not counting transition time)
+	transitionDuration: 7000, // The time the transition takes to complete
+	firstImageFadeInDuration: 1000
+}
+				</pre>
+			</code>
 		</div>
 		
 		<div id="downloads">
@@ -139,29 +169,16 @@
 			$(window).resize();
 		});
 		
-		$.wallpaper(
-		[
+		$.wallpaper([
 			'test-images/amsler-grid.gif',
 			'test-images/food___by_laprovocation.jpg',
 			'test-images/Empire_City_by_gamefan84.jpg',
 			'test-images/toys_by_momoclax.jpg',
-			'test-images/24cc2a06f45046251e26062ff89d4b3f.jpg',
-			
-			'test-images/css-tricks.jpg',
 			'test-images/escher_grid.jpg',
 			'test-images/Miami_City_by_Furiousxr.jpg',
 			'test-images/pieces-of-me.jpg',
-			'test-images/The_city_turns_Orange_by_gilad.jpg',
-			'test-images/toys_by_hcube.jpg',
-			//'test-images/.jpg'
-		],
-		{
-			duration: 5000,
-			transition: {
-				duration: 7000
-			}
-			//images: 'test-images/Empire_City_by_gamefan84.jpg'
-		});
+			'test-images/toys_by_hcube.jpg'
+		]);
 	</script>
 </body>
 </html>
