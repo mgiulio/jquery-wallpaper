@@ -1,3 +1,10 @@
+/**
+ * jQuery Wallpaper
+ * http://mgiulio.altervista.org
+ *
+ * See license.txt
+ */
+ 
 (function($) {
 $.wallpaper = function() {
 	var
