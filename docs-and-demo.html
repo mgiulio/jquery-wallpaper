@@ -5,6 +5,8 @@
 	<title>jQuery Wallpaper: a jQuery plugin for full page background images and slideshows</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<link href='http://fonts.googleapis.com/css?family=Coustard' rel='stylesheet' type='text/css'>
+	<link href="http://alexgorbatchev.com/pub/sh/current/styles/shCore.css" rel="stylesheet" type="text/css" />
+	<link href="http://alexgorbatchev.com/pub/sh/current/styles/shThemeDefault.css" rel="stylesheet" type="text/css" />
 	<style type="text/css">
 		*  { margin: 0; padding: 0;}
 		html {
@@ -58,6 +60,16 @@
 			fonta-family: monospace;
 			padding: 10px;
 		}
+		#toggle-btn {
+			position: fixed;
+			top: 10px;
+			left: 10px;
+			padding: 5px;
+			border: 1px solid #aaaaaa;
+			border-color: #fff #fff #aaa #aaa;
+			background-color: rgba(0,0,0,1.0);
+			border-radius: 5px;
+		}
 	</style>
 </head>
 <body>
@@ -87,10 +99,9 @@
 		<div id="usage">
 			<h2>Usage</h2>
 			<p>
-				Here is anexample from this page. Here we are using plugin default options:
+				Here is an example from this page. Here we are using plugin default options:
 			</p>
-			<code>
-				<pre>
+			<script type="syntaxhighlighter" class="brush: js"><![CDATA[
 $.wallpaper([
 	'test-images/amsler-grid.gif',
 	'test-images/food___by_laprovocation.jpg',
@@ -101,22 +112,20 @@ $.wallpaper([
 	'test-images/pieces-of-me.jpg',
 	'test-images/toys_by_hcube.jpg'
 ]);
-				</pre>
-			</code>
+]]></script>
+			</pre>
 			<p>
 				You can figure out the available options from the default configuration
 				object:
 			</p>
-			<code>
-				<pre>
+			<pre class="brush: js">
 { // All time are expressed in milliseconds
 	images: [],
 	imageDuration: 5000, // How much time an image is displayed(not counting transition time)
 	transitionDuration: 7000, // The time the transition takes to complete
 	firstImageFadeInDuration: 1000
 }
-				</pre>
-			</code>
+			</pre>
 			<p>
 				If you specify only an image there will be not slideshow, just a fixed background.
 				In this case it is possible to pass the single image as a string instead of an array.
@@ -124,19 +133,18 @@ $.wallpaper([
 		</div>
 		
 		<div id="issues">
-			<h2>Browser tested and issues</h2>
-			<p>
-				See the GitHub project issue tracker for bugs.
-			</p>
+			<h2>Browsers Tested and Bugs</h2>
 			<p>Tested on the following user agents:</p>
 			<ul>
-				<li>
-					Firefox 5 and 6 on Window 7:
-				</li>
+				<li>Firefox 5 and 6</li>
+				<li>IE 9</li>
+				<li>Opera 11.1</li>
+				<li>Chrome 13</li>
 			</ul>
 			<p>
-				If something goes wrong report it to the GitHub issue tracker.
-			</p>			
+				See the GitHub project issue tracker for current and future bugs and
+				to report them.
+			</p>
 		</div>
 		
 		<div id="license">
@@ -160,7 +168,8 @@ $.wallpaper([
 		<div id="in-the-wild">
 			<h2>In the Wild</h2>
 			<p>
-				If you use this plugin somewhere feel free to send methe link. I'll put it here.
+				If you use this plugin somewhere feel free to send me the link.
+				I'll be happy to publish it here.
 			</p>
 		</div>
 		
@@ -188,6 +197,9 @@ $.wallpaper([
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 	<script>!window.jQuery && document.write('<script src="http://code.jquery.com/jquery-1.6.2.min.js"><\/script>');</script>
 	<script src="jquery.wallpaper.js"></script>
+	<script src="http://alexgorbatchev.com/pub/sh/current/scripts/shCore.js"></script>
+	<script src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushJScript.js"></script>
+
 	<script>
 		$('#toggle-btn').click(function() {
 			$('#page-wrap').toggle();
@@ -195,6 +207,7 @@ $.wallpaper([
 		});
 		
 		$.wallpaper([
+			'test-images/geisha.jpg',
 			'test-images/amsler-grid.gif',
 			'test-images/food___by_laprovocation.jpg',
 			'test-images/Empire_City_by_gamefan84.jpg',
@@ -204,6 +217,8 @@ $.wallpaper([
 			'test-images/pieces-of-me.jpg',
 			'test-images/toys_by_hcube.jpg'
 		]);
+		
+		SyntaxHighlighter.all();
 	</script>
 </body>
 </html>
