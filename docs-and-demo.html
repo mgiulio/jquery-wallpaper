@@ -5,10 +5,12 @@
 	<title>jQuery Wallpaper: a jQuery plugin for full page background images and slideshows</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<link href='http://fonts.googleapis.com/css?family=Coustard' rel='stylesheet' type='text/css'>
+	<style type="text/css">
+		*  { margin: 0; padding: 0;}
+	</style>
 	<link href="http://alexgorbatchev.com/pub/sh/current/styles/shCore.css" rel="stylesheet" type="text/css" />
 	<link href="http://alexgorbatchev.com/pub/sh/current/styles/shThemeDefault.css" rel="stylesheet" type="text/css" />
 	<style type="text/css">
-		*  { margin: 0; padding: 0;}
 		html {
 			background-color: #000;
 		}
@@ -49,16 +51,6 @@
 		}
 		ul {
 			margin-left: 3em;
-		}
-		code {
-			display: block;
-			width: 75%;
-			margin: 1em auto;
-			background-color: #000;
-			border: 1pxsolid #aaaaaa;
-			color: orange;
-			fonta-family: monospace;
-			padding: 10px;
 		}
 		#toggle-btn {
 			position: fixed;
@@ -113,19 +105,18 @@ $.wallpaper([
 	'test-images/toys_by_hcube.jpg'
 ]);
 ]]></script>
-			</pre>
 			<p>
 				You can figure out the available options from the default configuration
 				object:
 			</p>
-			<pre class="brush: js">
+			<script type="syntaxhighlighter" class="brush: js"><![CDATA[
 { // All time are expressed in milliseconds
 	images: [],
 	imageDuration: 5000, // How much time an image is displayed(not counting transition time)
 	transitionDuration: 7000, // The time the transition takes to complete
 	firstImageFadeInDuration: 1000
 }
-			</pre>
+]]></script>
 			<p>
 				If you specify only an image there will be not slideshow, just a fixed background.
 				In this case it is possible to pass the single image as a string instead of an array.
