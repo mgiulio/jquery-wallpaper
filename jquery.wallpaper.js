@@ -150,10 +150,7 @@ $.wallpaper = function() {
 		}
 		
 		function preloadImages() {
-			var 
-				img,
-				i
-			;
+			var img, i
 			
 			for (i = 0; i < numImages; i++) {
 				imgMetadata.push({
@@ -177,12 +174,10 @@ $.wallpaper = function() {
 		
 		function createDoubleBuffer(dbl) {
 			var
-				im,
-				imStyle
+				im = new Image(),
+				imStyle = im.style
 			;
 			
-			im = new Image();
-			imStyle = im.style;
 			imStyle.position = 'fixed';
 			imStyle.zIndex = -9999;
 			imStyle.top = '0px';
@@ -214,9 +209,9 @@ $.wallpaper = function() {
 					im = dblBuff[0].img
 				;
 				
-				im.src = imgMetadata[0].url;
+				im.src = imgMetadata[imageIndex].url;
 				
-				stretchImage(im, imgMetadata[0].aspectRatio);
+				stretchImage(im, imgMetadata[imageIndex].aspectRatio);
 				
 				visibleBuff = 0;
 				currImage = imageIndex;
