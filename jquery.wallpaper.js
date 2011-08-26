@@ -85,9 +85,25 @@ $.wallpaper = function() {
 			wnd = $(window),
 			visibleBuff,
 			currImage, // The index of the image currently displayed by the slideshow
-			transitionPlaying
+			transitionPlaying,
+			i
 		;
+		
+		for (i = 0; i < numImages; ++i) {
+			imgMetadata.push({
+				url: cfg.images[i], 
+				loaded: false,
+				aspectRatio: undefined
+			});
+		}
 
+		$(document).bind('imageLoaded', function(e, /*$*/img) {
+			var 
+				i = $(img).data('imageIndex');
+			imgMetadata[i].loaded = true;
+			imgMetadata[i].aspectRatio = img.width / img.height;
+		});
+		
 		createDoubleBuffer(slideshow);
 		
 		if (slideshow)
@@ -150,26 +166,14 @@ $.wallpaper = function() {
 		}
 		
 		function preloadImages() {
-			var img, i
-			
-			for (i = 0; i < numImages; i++) {
-				imgMetadata.push({
-					url: cfg.images[i], 
-					loaded: false,
-					aspectRatio: undefined
-				});
-				
-				img = new Image();
-				
-				img.wallpaperIndex = i;
-				img.onload = function() {
-					imgMetadata[this.wallpaperIndex].loaded = true;
-					imgMetadata[this.wallpaperIndex].aspectRatio = this.width / this.height;
-					$(document).trigger('imageLoaded', this.wallpaperIndex);
-				};
-				
-				img.src = cfg.images[i];
-			}
+			for (var i = 0; i < numImages; i++)
+				$('<img>')
+					.data('imageIndex', i)
+					.load(function() {
+						$(document).trigger('imageLoaded', this/* [$(this)] */);
+					})
+					.attr('src', cfg.images[i])
+				;
 		}
 		
 		function createDoubleBuffer(dbl) {
@@ -204,11 +208,12 @@ $.wallpaper = function() {
 				});
 			}
 			
-			$(document).one('imageLoaded', function(e, imageIndex) {
+			$(document).one('imageLoaded', function(e, /*$*/img) {
 				var 
-					im = dblBuff[0].img
+					$img = $(img),
+					im = dblBuff[0].img,
+					imageIndex = $img.data('imageIndex')
 				;
-				
 				im.src = imgMetadata[imageIndex].url;
 				
 				stretchImage(im, imgMetadata[imageIndex].aspectRatio);
