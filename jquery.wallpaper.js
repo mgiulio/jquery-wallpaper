@@ -21,7 +21,6 @@ $.wallpaper = function() {
 			'background-attachment': 'fixed',
 			'background-position': 'center center',
 			'background-repeat': 'no-repeat',
-			'background-color': '#d2691e',
 			'background-size': 'cover'
 		});
 	}
