@@ -12,8 +12,7 @@ $.wallpaper = function() {
 	var
 		cfg = getConfig(arguments),
 		numImages = cfg.images.length,
-		slideshow = numImages > 1,
-		i, n
+		slideshow = numImages > 1
 	;
 	
 	if (!slideshow && canUseCSS3()) {
