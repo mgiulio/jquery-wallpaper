@@ -1,7 +1,7 @@
 /**
  * jQuery Wallpaper
  *
- * http://mgiulio.altervista.org
+ * http://mgiulio.github.com/jquery-wallpaper
  *
  * See license.txt
  */
