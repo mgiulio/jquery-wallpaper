@@ -71,9 +71,11 @@ $.wallpaper = function() {
 					'BackgroundSize')
 					.split(' ')
 			;
+			
 			for (var i in props) // check this
 				if (testStyle[props[i]] !== undefined )
 					return true;
+			
 			return false;
 		}
 	}
@@ -232,10 +234,8 @@ $.wallpaper = function() {
 						stretchImage(dblBuff[0].img, imgMetadata[dblBuff[0].imageIndex].aspectRatio);
 						stretchImage(dblBuff[1].img, imgMetadata[dblBuff[1].imageIndex].aspectRatio);
 					}
-					else {
-						// Stretch only the front(visible) buffer
+					else // Stretch only the front(visible) buffer
 						stretchImage(dblBuff[visibleBuff].img, imgMetadata[currImage].aspectRatio);
-					}
 				});
 			});
 		}
